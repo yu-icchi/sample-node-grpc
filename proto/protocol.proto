@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package protocol;
+
+service Packet {
+	rpc Stream (ReqStream) returns (stream ResStream) {}
+	rpc Heartbeat (stream Req) returns (stream Res) {}
+}
+
+message Req {
+	string msg = 1;
+}
+
+message Res {
+	string msg = 1;
+}
+
+message ReqStream {
+	int32 version = 1;
+	string topic = 2;
+	string event = 3;
+	string reqId = 4; // request id
+	string connId = 5; // connection id
+	bytes data = 6;
+}
+
+message ResStream {
+	enum Cmd {
+		SEND = 0;
+		REPLY = 1;
+		BROADCAST = 2;
+	}
+
+	int32 version = 1;
+	string topic = 2;
+	string event = 3;
+	string reqId = 4; // request id
+	string connId = 5; // connection id
+	Cmd cmd = 6;
+	bytes data = 7;
+}
