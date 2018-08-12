@@ -16,17 +16,17 @@ type server struct{}
 
 var _ pb.PacketServer = (*server)(nil)
 
-func (s *server) Stream(res *pb.ReqStream, stream pb.Packet_StreamServer) error {
-	fmt.Println(res)
+func (s *server) Stream(req *pb.ReqStream, stream pb.Packet_StreamServer) error {
+	fmt.Println(req)
 
 	messages := []string{"A", "B", "C"}
 	for _, msg := range messages {
 		resp := &pb.ResStream{
-			ConnId:  res.ConnId,
-			ReqId:   res.ReqId,
-			Event:   res.Event,
-			Topic:   res.Topic,
-			Version: res.Version,
+			ConnId:  req.ConnId,
+			ReqId:   req.ReqId,
+			Event:   req.Event,
+			Topic:   req.Topic,
+			Version: req.Version,
 			Cmd:     pb.ResStream_SEND,
 			Data:    []byte(msg),
 		}
